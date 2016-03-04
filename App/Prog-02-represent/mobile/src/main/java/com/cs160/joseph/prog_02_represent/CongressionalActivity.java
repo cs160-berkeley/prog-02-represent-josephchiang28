@@ -38,12 +38,7 @@ public class CongressionalActivity extends AppCompatActivity {
                 detailedIntent.putExtra("WEBSITE", repsWebsites[position]);
                 detailedIntent.putExtra("TWEET", repsTweets[position]);
 
-                Intent watchIntent = new Intent(CongressionalActivity.this, PhoneToWatchService.class);
-                watchIntent.putExtra("NAME", repsNames[position]);
-                watchIntent.putExtra("TITLE", "Senator");
-
                 startActivity(detailedIntent);
-                startActivity(watchIntent);
             }
         });
     }

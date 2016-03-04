@@ -3,6 +3,7 @@ package com.cs160.joseph.prog_02_represent;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -17,15 +18,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public HashMap<String, String[]> queryWithZip(int zipCode) {
-        HashMap<String, String[]> repsMap = new HashMap<String, String[]>();
+        HashMap<String, String[]> repsInfo = new HashMap<String, String[]>();
 
         // Fills in dummy info for now
-        repsMap.put("REPS_NAMES", new String[]{"Barbara Lee", "Dianne Feinstein"});
-        repsMap.put("REPS_PARTIES", new String[]{"Democrat", "Democrat"});
-        repsMap.put("REPS_EMAILS", new String[]{"A@gmail.com", "B@gmail.com"});
-        repsMap.put("REPS_WEBSITES", new String[]{"www.A.com", "www.B.com"});
-        repsMap.put("REPS_TWEETS", new String[]{"This is tweet A", "This is tweet B"});
-        return repsMap;
+        repsInfo.put("REPS_NAMES", new String[]{"Barbara Lee", "Dianne Feinstein"});
+        repsInfo.put("REPS_PARTIES", new String[]{"Democrat", "Democrat"});
+        repsInfo.put("REPS_EMAILS", new String[]{"A@gmail.com", "B@gmail.com"});
+        repsInfo.put("REPS_WEBSITES", new String[]{"www.A.com", "www.B.com"});
+        repsInfo.put("REPS_TWEETS", new String[]{"This is tweet A", "This is tweet B"});
+        repsInfo.put("REPS_TITLES", new String[]{"Representative A", "Representative B"});
+        return repsInfo;
     }
 
     public void lookupWithZip(View view) {
@@ -37,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
             congressionalIntent.putExtra(key, repsInfo.get(key));
         }
         startActivity(congressionalIntent);
+
+        Intent watchIntent = new Intent(this, PhoneToWatchService.class);
+        String data = TextUtils.join(",", repsInfo.get("REPS_NAMES"));
+        data += ";" + TextUtils.join(",", repsInfo.get("REPS_TITLES"));
+        watchIntent.putExtra("DATA", data);
+        startService(watchIntent);
     }
 
     public void lookupWithCurrentLocation(View view) {
