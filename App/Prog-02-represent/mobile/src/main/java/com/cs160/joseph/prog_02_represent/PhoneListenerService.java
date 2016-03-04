@@ -23,26 +23,39 @@ public class PhoneListenerService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         Log.d("T", "in PhoneListenerService, got: " + messageEvent.getPath());
-        if( messageEvent.getPath().equalsIgnoreCase(TOAST) ) {
+        String data = new String(messageEvent.getData(), StandardCharsets.UTF_8);
+        String[] dataArray = data.split(";");
+        Intent intent = new Intent(this, DetailedActivity.class );
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //you need to add this flag since you're starting a new activity from a service
+        intent.putExtra("NAME", dataArray[0]);
+        intent.putExtra("PARTY", dataArray[1]);
+        intent.putExtra("EMAIL", dataArray[2]);
+        intent.putExtra("WEBSITE", dataArray[3]);
+        intent.putExtra("TWEET", dataArray[4]);
+        Log.d("T", "about to start phone DetailedActivity with DATA: " + data);
+        startActivity(intent);
+//        if( messageEvent.getPath().equalsIgnoreCase(TOAST) ) {
 
             // Value contains the String we sent over in WatchToPhoneService, "good job"
-            String value = new String(messageEvent.getData(), StandardCharsets.UTF_8);
 
             // Make a toast with the String
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_SHORT;
+//            Context context = getApplicationContext();
+//            int duration = Toast.LENGTH_SHORT;
+//
+//            Toast toast = Toast.makeText(context, value, duration);
+//            toast.show();
 
-            Toast toast = Toast.makeText(context, value, duration);
-            toast.show();
+
 
             // so you may notice this crashes the phone because it's
             //''sending message to a Handler on a dead thread''... that's okay. but don't do this.
             // replace sending a toast with, like, starting a new activity or something.
             // who said skeleton code is untouchable? #breakCSconceptions
 
-        } else {
-            super.onMessageReceived( messageEvent );
-        }
+//        } else {
+//            super.onMessageReceived( messageEvent );
+//        }
 
     }
 }

@@ -22,6 +22,7 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
 
     private GoogleApiClient mWatchApiClient;
     private List<Node> nodes = new ArrayList<>();
+    private String data;
 
     @Override
     public void onCreate() {
@@ -32,7 +33,7 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
                 .addConnectionCallbacks(this)
                 .build();
         //and actually connect it
-        mWatchApiClient.connect();
+//        mWatchApiClient.connect();
     }
 
     @Override
@@ -47,6 +48,28 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
         return null;
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        // Which cat do we want to feed? Grab this info from INTENT
+        // which was passed over when we called startService
+        Bundle extras = intent.getExtras();
+        final String dataT = extras.getString("DATA");
+        data = dataT;
+
+        // Send the message with the cat name
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //first, connect to the apiclient
+                mWatchApiClient.connect();
+                //now that you're connected, send a massage with the cat name
+//                sendMessage("/DATA", data);
+            }
+        }).start();
+
+        return START_STICKY;
+    }
+
     @Override //alternate method to connecting: no longer create this in a new thread, but as a callback
     public void onConnected(Bundle bundle) {
         Log.d("T", "in onconnected");
@@ -55,11 +78,11 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
                     @Override
                     public void onResult(NodeApi.GetConnectedNodesResult getConnectedNodesResult) {
                         nodes = getConnectedNodesResult.getNodes();
-                        Log.d("T", "found nodes");
+                        Log.d("T", "Found Data");
                         //when we find a connected node, we populate the list declared above
                         //finally, we can send a message
-                        sendMessage("/send_toast", "Good job!");
-                        Log.d("T", "sent");
+                        sendMessage("/DATA", data);
+                        Log.d("T", "Sent: " + data);
                     }
                 });
     }
