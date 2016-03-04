@@ -21,12 +21,12 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, String[]> repsInfo = new HashMap<String, String[]>();
 
         // Fills in dummy info for now
-        repsInfo.put("REPS_NAMES", new String[]{"Barbara Lee", "Dianne Feinstein"});
-        repsInfo.put("REPS_PARTIES", new String[]{"Democrat", "Democrat"});
-        repsInfo.put("REPS_EMAILS", new String[]{"A@gmail.com", "B@gmail.com"});
-        repsInfo.put("REPS_WEBSITES", new String[]{"www.A.com", "www.B.com"});
-        repsInfo.put("REPS_TWEETS", new String[]{"This is tweet A", "This is tweet B"});
-        repsInfo.put("REPS_TITLES", new String[]{"Representative A", "Representative B"});
+        repsInfo.put("REPS_NAMES", new String[]{"Barbara Lee", "Dianne Feinstein", "Person C"});
+        repsInfo.put("REPS_PARTIES", new String[]{"Democrat", "Democrat", "Republican"});
+        repsInfo.put("REPS_EMAILS", new String[]{"A@gmail.com", "B@gmail.com", "C@gmail.com"});
+        repsInfo.put("REPS_WEBSITES", new String[]{"www.A.com", "www.B.com", "www.C.com"});
+        repsInfo.put("REPS_TWEETS", new String[]{"This is tweet A", "This is tweet B", "This is tweet C"});
+        repsInfo.put("REPS_TITLES", new String[]{"Representative A", "Representative B", "Representative C"});
         return repsInfo;
     }
 
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void lookupWithCurrentLocation(View view) {
-
+        // Dummy for now
+        lookupWithZip(view);
     }
 }

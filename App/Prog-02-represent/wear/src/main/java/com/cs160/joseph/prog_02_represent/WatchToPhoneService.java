@@ -33,7 +33,7 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
                 .addConnectionCallbacks(this)
                 .build();
         //and actually connect it
-//        mWatchApiClient.connect();
+        mWatchApiClient.connect();
     }
 
     @Override
@@ -56,17 +56,6 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
         final String dataT = extras.getString("DATA");
         data = dataT;
 
-        // Send the message with the cat name
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //first, connect to the apiclient
-                mWatchApiClient.connect();
-                //now that you're connected, send a massage with the cat name
-//                sendMessage("/DATA", data);
-            }
-        }).start();
-
         return START_STICKY;
     }
 
@@ -83,6 +72,7 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
                         //finally, we can send a message
                         sendMessage("/DATA", data);
                         Log.d("T", "Sent: " + data);
+                        WatchToPhoneService.this.stopSelf();
                     }
                 });
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.wearable.view.GridPagerAdapter;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d("CLICKED: ", repsNames[col]);
                     Intent phoneIntent = new Intent(mContext, WatchToPhoneService.class);
                     String data = String.format("%s;%s;%s;%s;%s;%s", repsNames[col], "Democrat", "B@gmail.com", "www.B.com", "This is tweet B", repsTitles[col]);
                     phoneIntent.putExtra("DATA", data);
@@ -67,7 +69,7 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
             int obamaVotes = ran.nextInt(20) + 50;
             String[] californiaCounties = new String[] { "Alameda", "Alpine", "Amador", "Butte","Calaveras", "Colusa", "Fresno", "Glenn"};
             obamaView.setText("Obama: " + Integer.toString(obamaVotes) + "%");
-            romneyView.setText("Obama: " + Integer.toString(100-obamaVotes) + "%");
+            romneyView.setText("Romney: " + Integer.toString(100-obamaVotes) + "%");
             countyView.setText(californiaCounties[ran.nextInt(californiaCounties.length)] + " County");
             stateView.setText("California");
         }
