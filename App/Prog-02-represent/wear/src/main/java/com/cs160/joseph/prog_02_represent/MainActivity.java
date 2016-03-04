@@ -39,7 +39,6 @@ public class MainActivity extends Activity {
             Log.d("repsNames", categories[0]);
             Log.d("repsNames", categories[0]);
             final GridViewPager pager = (GridViewPager) findViewById(R.id.pager);
-//            pager.setAdapter(new WatchGridPagerAdapter(this, getFragmentManager(), repsNames, repsTitles));
             RepGridPagerAdapter rpager = new RepGridPagerAdapter(this, repsNames, repsTitles);
             pager.setAdapter(rpager);
         }
