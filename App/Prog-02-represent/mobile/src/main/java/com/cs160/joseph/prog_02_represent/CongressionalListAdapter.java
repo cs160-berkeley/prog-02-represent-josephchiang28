@@ -31,15 +31,21 @@ public class CongressionalListAdapter extends ArrayAdapter<String> {
 
     public View getView(int position,View view,ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.rep_list_row, null,true);
+        View rowView = inflater.inflate(R.layout.rep_list_row, null, true);
 
 //        ImageView imageView = (ImageView) rowView.findViewById(R.id.rep_portrait);
         TextView repNameView = (TextView) rowView.findViewById(R.id.rep_name);
         TextView repPartyView = (TextView) rowView.findViewById(R.id.rep_party);
+        TextView repEmailView = (TextView) rowView.findViewById(R.id.rep_email);
+        TextView repWebsiteView = (TextView) rowView.findViewById(R.id.rep_website);
+        TextView repTweetView = (TextView) rowView.findViewById(R.id.rep_tweet);
 
 //        imageView.setImageResource(imgid[position]);
         repNameView.setText(repsNames[position]);
         repPartyView.setText(repsParties[position]);
+        repEmailView.setText(repsEmails[position]);
+        repWebsiteView.setText(repsWebsites[position]);
+        repTweetView.setText(repsTweets[position]);
         return rowView;
     };
 }

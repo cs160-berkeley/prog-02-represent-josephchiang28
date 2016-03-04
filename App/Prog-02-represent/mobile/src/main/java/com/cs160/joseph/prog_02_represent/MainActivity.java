@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,9 +22,9 @@ public class MainActivity extends AppCompatActivity {
         // Fills in dummy info for now
         repsMap.put("REPS_NAMES", new String[]{"Barbara Lee", "Dianne Feinstein"});
         repsMap.put("REPS_PARTIES", new String[]{"Democrat", "Democrat"});
-        repsMap.put("REPS_EMAILS", new String[]{"Email", "Email"});
-        repsMap.put("REPS_WEBSITES", new String[]{"Website", "Website"});
-        repsMap.put("REPS_TWEETS", new String[]{"This is tweet 1", "This is tweet 2"});
+        repsMap.put("REPS_EMAILS", new String[]{"A@gmail.com", "B@gmail.com"});
+        repsMap.put("REPS_WEBSITES", new String[]{"www.A.com", "www.B.com"});
+        repsMap.put("REPS_TWEETS", new String[]{"This is tweet A", "This is tweet B"});
         return repsMap;
     }
 

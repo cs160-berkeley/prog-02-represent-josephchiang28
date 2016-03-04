@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CongressionalActivity"></activity>
+        <activity android:name=".CongressionalActivity" />
+        <activity android:name=".DetailedActivity"></activity>
     </application>
 
 </manifest>
