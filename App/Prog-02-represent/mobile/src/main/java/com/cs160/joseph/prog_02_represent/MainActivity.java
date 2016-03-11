@@ -1,8 +1,11 @@
 package com.cs160.joseph.prog_02_represent;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private Geocoder geoCoder;
     private GoogleApiClient mGoogleApiClient;
-    private double mLatitude;
-    private double mLongitude;
+    private String mLatitude;
+    private String mLongitude;
     private RequestQueue mRequestQueue;
     private static final String mGoogleGeocodingAPIKey = "AIzaSyBf7pvbE1iCeZqZK5QGxGAM8_czZxrG8hk";
     private static final String mSunlightFoundationAPIKey = "f7d96524dc8f4b9aa7ef8885500db58f";
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private static final HashMap<String, String> partyMap = new HashMap<String, String>() {{
         put("D", "Democrat");
         put("R", "Republican");
+        put("I", "Independent");
     }};
 
     @Override
@@ -62,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     public void onConnected(Bundle connectionHint) {
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
-            mLatitude = mLastLocation.getLatitude();
-            mLongitude = mLastLocation.getLongitude();
+            mLatitude = Double.toString(mLastLocation.getLatitude());
+            mLongitude = Double.toString(mLastLocation.getLongitude());
         }
     }
 
@@ -77,25 +81,25 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     }
 
-    public HashMap<String, String[]> queryWithZip(int zipCode) {
-        HashMap<String, String[]> repsInfo = new HashMap<String, String[]>();
-
-        // Fills in dummy info for now
-        repsInfo.put("REPS_NAMES", new String[]{"Barbara Lee", "Dianne Feinstein", "Person C"});
-        repsInfo.put("REPS_PARTIES", new String[]{"Democrat", "Democrat", "Republican"});
-        repsInfo.put("REPS_EMAILS", new String[]{"A@gmail.com", "B@gmail.com", "C@gmail.com"});
-        repsInfo.put("REPS_WEBSITES", new String[]{"www.A.com", "www.B.com", "www.C.com"});
-        repsInfo.put("REPS_TWEETS", new String[]{"This is tweet A", "This is tweet B", "This is tweet C"});
-        repsInfo.put("REPS_TITLES", new String[]{"Representative A", "Representative B", "Representative C"});
-        return repsInfo;
-    }
-
     public void lookupWithZip(View view) {
         EditText zip_code_view = (EditText) findViewById(R.id.zip_code_input);
         String zip = zip_code_view.getText().toString();
-        String url = String.format("%s?zip=%s&apikey=%s", mSunlightFoundationLegislatorsLocateURL, zip, mSunlightFoundationAPIKey);
+        requestRepInfo(zip, null, null);
+    }
+
+    public void lookupWithCurrentLocation(View view) {
+        requestRepInfo(null, mLatitude, mLongitude);
+    }
+
+    public void requestRepInfo(String zip, String latitude, String longitude) {
+        String url;
+        if (zip == null) {
+            url = String.format("%s?latitude=%s&longitude=%s&apikey=%s", mSunlightFoundationLegislatorsLocateURL, latitude, longitude, mSunlightFoundationAPIKey);
+        } else {
+            url = String.format("%s?zip=%s&apikey=%s", mSunlightFoundationLegislatorsLocateURL, zip, mSunlightFoundationAPIKey);
+        }
         Log.d("GET REQUEST URL: ", url);
-        final HashMap<String, String[]> repsInfo = new HashMap<String, String[]>();
+
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -108,19 +112,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
 
                     }
                 });
         mRequestQueue.add(jsObjRequest);
-
-    }
-
-    public void lookupWithCurrentLocation(View view) {
-        // Dummy for now
-
-//        geoCoder.getFromLocationName();
-        lookupWithZip(view);
     }
 
     public HashMap<String, String[]> parseRepResponse(JSONObject response) {
