@@ -28,6 +28,7 @@ public class DetailedActivity extends AppCompatActivity {
     private int httpResponseCount;
     private int httpResponseRequired;
     private HashMap<String, JSONObject> httpResponses;
+    private Intent intent;
     private static final String mSunlightFoundationLegislatorsURL = "http://congress.api.sunlightfoundation.com/legislators";
     private static final String mSunlightFoundationCommitteesURL = "http://congress.api.sunlightfoundation.com/committees";
     private static final String mSunlightFoundationBillsURL = "http://congress.api.sunlightfoundation.com/bills";
@@ -45,7 +46,7 @@ public class DetailedActivity extends AppCompatActivity {
         httpResponseRequired = 3;
         httpResponses = new HashMap<String, JSONObject>();
 
-        Intent intent = getIntent();
+        intent = getIntent();
         final String bioguideId = intent.getStringExtra("BIOGUIDE_ID");
 
         String legislatorsRequestUrl = String.format("%s?bioguide_id=%s&&apikey=%s", mSunlightFoundationLegislatorsURL, bioguideId, MainActivity.getSunlightFoundationAPIKey());
@@ -141,7 +142,7 @@ public class DetailedActivity extends AppCompatActivity {
             repPartyView.setText(MainActivity.partyMap.get(repJsonObject.getString("party")));
             repEmailView.setText(repJsonObject.getString("oc_email"));
             repWebsiteView.setText(repJsonObject.getString("website"));
-            repTweetView.setText(repJsonObject.getString("twitter_id"));
+            repTweetView.setText(intent.getStringExtra("TWEET"));
 
             // Set detailed profile
             StringBuffer profileSb = new StringBuffer();

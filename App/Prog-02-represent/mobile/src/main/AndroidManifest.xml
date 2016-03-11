@@ -27,6 +27,9 @@
             </intent-filter>
         </service>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="4e631ba2c37c448dff8c4c04833ad4875d09873c" />
     </application>
 
     <!-- Get current location -->

@@ -26,6 +26,9 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import io.fabric.sdk.android.Fabric;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private String mLongitude;
     private RequestQueue mRequestQueue;
     private static final String mGoogleGeocodingAPIKey = "AIzaSyBf7pvbE1iCeZqZK5QGxGAM8_czZxrG8hk";
+    private static final String TWITTER_KEY = "Tt33x4fL3E6WXxywGHQqD1hKk";
+    private static final String TWITTER_SECRET = "0Ie09s2S0LqAEDFwiOTRNtKN6f9ksIhsqI2IK2G3no85RXWGT2";
     private static final String mSunlightFoundationAPIKey = "f7d96524dc8f4b9aa7ef8885500db58f";
     private static final String mSunlightFoundationLegislatorsLocateURL = "http://congress.api.sunlightfoundation.com/legislators/locate";
     public static final HashMap<String, String> partyMap = new HashMap<String, String>() {{
@@ -48,9 +53,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         put("I", "Independent");
     }};
 
+    // Berkeley Coordinates (37.8717, -122.2728)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         geoCoder = new Geocoder(getApplicationContext());
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -131,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             repsInfo.put("REPS_PARTIES", new String[repCount]);
             repsInfo.put("REPS_EMAILS", new String[repCount]);
             repsInfo.put("REPS_WEBSITES", new String[repCount]);
-            repsInfo.put("REPS_TWEETS", new String[repCount]);
+            repsInfo.put("REPS_TWITTER_IDS", new String[repCount]);
             repsInfo.put("REPS_TITLES", new String[repCount]);
             repsInfo.put("REPS_BIOGUIDE_IDS", new String[repCount]);
             for (int i = 0; i < repJsonArray.length(); i++) {
@@ -140,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 repsInfo.get("REPS_PARTIES")[i] = partyMap.get(repJsonObject.getString("party"));
                 repsInfo.get("REPS_EMAILS")[i] = repJsonObject.getString("oc_email");
                 repsInfo.get("REPS_WEBSITES")[i] = repJsonObject.getString("website");
-                repsInfo.get("REPS_TWEETS")[i] = repJsonObject.getString("twitter_id");
+                repsInfo.get("REPS_TWITTER_IDS")[i] = repJsonObject.getString("twitter_id");
                 repsInfo.get("REPS_TITLES")[i] = repJsonObject.getString("title");
                 repsInfo.get("REPS_BIOGUIDE_IDS")[i] = repJsonObject.getString("bioguide_id");
             }
