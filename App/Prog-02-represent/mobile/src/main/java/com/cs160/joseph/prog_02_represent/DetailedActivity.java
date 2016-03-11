@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -15,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,7 +125,7 @@ public class DetailedActivity extends AppCompatActivity {
 
     public void setProfileView(JSONObject legislatorsResponse) {
         Log.d("IN", "SET PROFILE VIEW");
-        //        ImageView imageView = (ImageView) rowView.findViewById(R.id.rep_portrait);
+        ImageView imageView = (ImageView) findViewById(R.id.rep_portrait);
         TextView repNameView = (TextView) findViewById(R.id.rep_name);
         TextView repPartyView = (TextView) findViewById(R.id.rep_party);
         TextView repEmailView = (TextView) findViewById(R.id.rep_email);
@@ -138,6 +140,7 @@ public class DetailedActivity extends AppCompatActivity {
             JSONObject repJsonObject = legislatorsResponse.getJSONArray("results").getJSONObject(0);
 
             // Set basic profile
+            Picasso.with(getApplicationContext()).load("https://twitter.com/" + intent.getStringExtra("TWITTER_ID") + "/profile_image?size=original").into(imageView);
             repNameView.setText(repJsonObject.getString("first_name") + " " + repJsonObject.getString("last_name"));
             repPartyView.setText(MainActivity.partyMap.get(repJsonObject.getString("party")));
             repEmailView.setText(repJsonObject.getString("oc_email"));

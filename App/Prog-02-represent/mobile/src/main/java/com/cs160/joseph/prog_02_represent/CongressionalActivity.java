@@ -100,12 +100,13 @@ public class CongressionalActivity extends AppCompatActivity {
         final String[] repsEmails = intent.getStringArrayExtra("REPS_EMAILS");
         final String[] repsWebsites = intent.getStringArrayExtra("REPS_WEBSITES");
         final String[] repsBioguideIds = intent.getStringArrayExtra("REPS_BIOGUIDE_IDS");
+        final String[] repsTwitterIds = intent.getStringArrayExtra("REPS_TWITTER_IDS");
         final String[] repsTweets = new String[tweetMap.size()];
         for (int i = 0; i < tweetMap.size(); i++) {
             repsTweets[i] = tweetMap.get(i);
         }
 
-        CongressionalListAdapter congressionalListAdapter = new CongressionalListAdapter(this, repsNames, repsParties, repsEmails, repsWebsites, repsTweets);
+        CongressionalListAdapter congressionalListAdapter = new CongressionalListAdapter(this, repsNames, repsParties, repsEmails, repsWebsites, repsTweets, repsTwitterIds);
         ListView congressionalList = (ListView) findViewById(R.id.congressional_list_view);
         congressionalList.setAdapter(congressionalListAdapter);
 
@@ -113,16 +114,10 @@ public class CongressionalActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
                 Intent detailedIntent = new Intent(CongressionalActivity.this, DetailedActivity.class);
-//                detailedIntent.putExtra("NAME", repsNames[position]);
-//                detailedIntent.putExtra("PARTY", repsParties[position]);
-//                detailedIntent.putExtra("EMAIL", repsEmails[position]);
-//                detailedIntent.putExtra("WEBSITE", repsWebsites[position]);
                 detailedIntent.putExtra("TWEET", repsTweets[position]);
+                detailedIntent.putExtra("TWITTER_ID", repsTwitterIds[position]);
                 detailedIntent.putExtra("BIOGUIDE_ID", repsBioguideIds[position]);
-
                 startActivity(detailedIntent);
             }
         });
