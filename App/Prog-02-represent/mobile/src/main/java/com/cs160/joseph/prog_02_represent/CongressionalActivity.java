@@ -8,12 +8,26 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 public class CongressionalActivity extends AppCompatActivity {
+
+    private RequestQueue mRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_congressional);
+        mRequestQueue = Volley.newRequestQueue(this);
 
         Intent intent = getIntent();
         final String[] repsNames = intent.getStringArrayExtra("REPS_NAMES");
@@ -21,6 +35,7 @@ public class CongressionalActivity extends AppCompatActivity {
         final String[] repsEmails = intent.getStringArrayExtra("REPS_EMAILS");
         final String[] repsWebsites = intent.getStringArrayExtra("REPS_WEBSITES");
         final String[] repsTweets = intent.getStringArrayExtra("REPS_TWEETS");
+        final String[] repsBioguideIds = intent.getStringArrayExtra("REPS_BIOGUIDE_IDS");
 
         CongressionalListAdapter congressionalListAdapter = new CongressionalListAdapter(this, repsNames, repsParties, repsEmails, repsWebsites, repsTweets);
         ListView congressionalList = (ListView) findViewById(R.id.congressional_list_view);
@@ -30,13 +45,15 @@ public class CongressionalActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
+
+
                 Intent detailedIntent = new Intent(CongressionalActivity.this, DetailedActivity.class);
                 detailedIntent.putExtra("NAME", repsNames[position]);
                 detailedIntent.putExtra("PARTY", repsParties[position]);
                 detailedIntent.putExtra("EMAIL", repsEmails[position]);
                 detailedIntent.putExtra("WEBSITE", repsWebsites[position]);
                 detailedIntent.putExtra("TWEET", repsTweets[position]);
+                detailedIntent.putExtra("BIOGUIDE_ID", repsBioguideIds[position]);
 
                 startActivity(detailedIntent);
             }

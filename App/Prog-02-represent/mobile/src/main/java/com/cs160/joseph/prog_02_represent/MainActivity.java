@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private static final String mGoogleGeocodingAPIKey = "AIzaSyBf7pvbE1iCeZqZK5QGxGAM8_czZxrG8hk";
     private static final String mSunlightFoundationAPIKey = "f7d96524dc8f4b9aa7ef8885500db58f";
     private static final String mSunlightFoundationLegislatorsLocateURL = "http://congress.api.sunlightfoundation.com/legislators/locate";
-    private static final HashMap<String, String> partyMap = new HashMap<String, String>() {{
+    public static final HashMap<String, String> partyMap = new HashMap<String, String>() {{
         put("D", "Democrat");
         put("R", "Republican");
         put("I", "Independent");
@@ -79,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    public static String getSunlightFoundationAPIKey() {
+        return mSunlightFoundationAPIKey;
     }
 
     public void lookupWithZip(View view) {
@@ -129,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             repsInfo.put("REPS_WEBSITES", new String[repCount]);
             repsInfo.put("REPS_TWEETS", new String[repCount]);
             repsInfo.put("REPS_TITLES", new String[repCount]);
+            repsInfo.put("REPS_BIOGUIDE_IDS", new String[repCount]);
             for (int i = 0; i < repJsonArray.length(); i++) {
                 JSONObject repJsonObject = repJsonArray.getJSONObject(i);
                 repsInfo.get("REPS_NAMES")[i] = repJsonObject.getString("first_name") + " " + repJsonObject.getString("last_name");
@@ -137,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 repsInfo.get("REPS_WEBSITES")[i] = repJsonObject.getString("website");
                 repsInfo.get("REPS_TWEETS")[i] = repJsonObject.getString("twitter_id");
                 repsInfo.get("REPS_TITLES")[i] = repJsonObject.getString("title");
+                repsInfo.get("REPS_BIOGUIDE_IDS")[i] = repJsonObject.getString("bioguide_id");
             }
         } catch (JSONException e) {
 
