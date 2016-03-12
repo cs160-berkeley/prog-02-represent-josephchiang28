@@ -31,13 +31,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-//        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
-//            @Override
-//            public void onLayoutInflated(WatchViewStub stub) {
-//                mTextView = (TextView) stub.findViewById(R.id.text);
-//            }
-//        });
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -51,12 +44,14 @@ public class MainActivity extends Activity {
             String data = intent.getStringExtra("DATA");
             String[] categories = data.split(";");
             String[] repsNames = categories[0].split(",");
-            String[] repsTitles = categories[1].split(",");
+            String[] repsParties = categories[1].split(",");
+            String[] repsBioguideIds = categories[2].split(",");
+            String[] electionPercentages = categories[3].split(",");
+            String[] countyState = categories[4].split(",");
             Log.d("DATA", data);
             Log.d("repsNames", categories[0]);
-            Log.d("repsNames", categories[0]);
             final GridViewPager pager = (GridViewPager) findViewById(R.id.pager);
-            RepGridPagerAdapter rpager = new RepGridPagerAdapter(this, repsNames, repsTitles);
+            RepGridPagerAdapter rpager = new RepGridPagerAdapter(this, repsNames, repsParties, repsBioguideIds, electionPercentages, countyState);
             pager.setAdapter(rpager);
         }
     }
@@ -84,7 +79,6 @@ public class MainActivity extends Activity {
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, "Zipcode changed to " + Integer.toString(newZipcode), duration);
                 toast.show();
-
             }
         }
 

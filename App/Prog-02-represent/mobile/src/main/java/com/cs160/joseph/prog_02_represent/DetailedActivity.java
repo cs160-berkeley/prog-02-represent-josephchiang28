@@ -50,6 +50,7 @@ public class DetailedActivity extends AppCompatActivity {
 
         intent = getIntent();
         final String bioguideId = intent.getStringExtra("BIOGUIDE_ID");
+        Log.d("BIOGUIDE_ID: ", bioguideId);
 
         String legislatorsRequestUrl = String.format("%s?bioguide_id=%s&&apikey=%s", mSunlightFoundationLegislatorsURL, bioguideId, MainActivity.getSunlightFoundationAPIKey());
         JsonObjectRequest legislatorsRequest = new JsonObjectRequest
@@ -140,7 +141,7 @@ public class DetailedActivity extends AppCompatActivity {
             JSONObject repJsonObject = legislatorsResponse.getJSONArray("results").getJSONObject(0);
 
             // Set basic profile
-            Picasso.with(getApplicationContext()).load("https://twitter.com/" + intent.getStringExtra("TWITTER_ID") + "/profile_image?size=original").into(imageView);
+            Picasso.with(getApplicationContext()).load("https://twitter.com/" + repJsonObject.getString("twitter_id") + "/profile_image?size=original").into(imageView);
             repNameView.setText(repJsonObject.getString("first_name") + " " + repJsonObject.getString("last_name"));
             repPartyView.setText(MainActivity.partyMap.get(repJsonObject.getString("party")));
             repEmailView.setText(repJsonObject.getString("oc_email"));
@@ -154,6 +155,9 @@ public class DetailedActivity extends AppCompatActivity {
             profileSb.append("\n");
             profileSb.append("Birthday: ");
             profileSb.append(repJsonObject.getString("birthday"));
+            profileSb.append("\n");
+            profileSb.append("Term end: ");
+            profileSb.append(repJsonObject.getString("term_end"));
             profileSb.append("\n");
             profileSb.append("gender: ");
             profileSb.append(genderMap.get(repJsonObject.getString("gender")));

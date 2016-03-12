@@ -25,17 +25,10 @@ public class PhoneListenerService extends WearableListenerService {
     public void onMessageReceived(MessageEvent messageEvent) {
         Log.d("T", "in PhoneListenerService, got: " + messageEvent.getPath());
         String data = new String(messageEvent.getData(), StandardCharsets.UTF_8);
-//        boolean isInteger;
-//        try{
-//            int x = Integer.parseInt(data);
-//            isInteger = true;
-//        } catch(NumberFormatException e){
-//            isInteger = false;
-//        }
         if (data.length() == 5) {
             Log.d("RECEIVED ZIPCODE: ", data);
             Intent intent = new Intent(this, CongressionalActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Need to add this flag since you're starting a new activity from a service
             intent.putExtra("REPS_NAMES", new String[]{"Person D", "Person E", "Person F"});
             intent.putExtra("REPS_PARTIES", new String[]{"Democrat", "Democrat", "Republican"});
             intent.putExtra("REPS_EMAILS", new String[]{"D@gmail.com", "E@gmail.com", "F@gmail.com"});
@@ -54,38 +47,10 @@ public class PhoneListenerService extends WearableListenerService {
             Log.d("RECEIVED DATA:", data);
             String[] dataArray = data.split(";");
             Intent intent = new Intent(this, DetailedActivity.class );
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //you need to add this flag since you're starting a new activity from a service
-            intent.putExtra("NAME", dataArray[0]);
-            intent.putExtra("PARTY", dataArray[1]);
-            intent.putExtra("EMAIL", dataArray[2]);
-            intent.putExtra("WEBSITE", dataArray[3]);
-            intent.putExtra("TWEET", dataArray[4]);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Need to add this flag since you're starting a new activity from a service
+            intent.putExtra("BIOGUIDE_ID", data);
             Log.d("T", "about to start phone DetailedActivity with DATA: " + data);
             startActivity(intent);
         }
-
-//        if( messageEvent.getPath().equalsIgnoreCase(TOAST) ) {
-
-            // Value contains the String we sent over in WatchToPhoneService, "good job"
-
-            // Make a toast with the String
-//            Context context = getApplicationContext();
-//            int duration = Toast.LENGTH_SHORT;
-//
-//            Toast toast = Toast.makeText(context, value, duration);
-//            toast.show();
-
-
-
-            // so you may notice this crashes the phone because it's
-            //''sending message to a Handler on a dead thread''... that's okay. but don't do this.
-            // replace sending a toast with, like, starting a new activity or something.
-            // who said skeleton code is untouchable? #breakCSconceptions
-
-//        } else {
-//            super.onMessageReceived( messageEvent );
-//        }
-
     }
 }

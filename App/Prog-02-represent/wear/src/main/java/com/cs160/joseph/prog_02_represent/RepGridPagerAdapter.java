@@ -20,13 +20,19 @@ import java.util.Random;
 public class RepGridPagerAdapter extends GridPagerAdapter {
     final Context mContext;
     private final String[] repsNames;
-    private final String[] repsTitles;
+    private final String[] repsParties;
+    private final String[] repsBioguideIds;
+    private final String[] electionPercentages;
+    private final String[] countyState;
 
 
-    public RepGridPagerAdapter(final Context context, String[] repsNames, String[] repsTitles) {
+    public RepGridPagerAdapter(final Context context, String[] repsNames, String[] repsParties, String[] repsBioguideIds, String[] electionPercentages, String[] countyState) {
         mContext = context;
         this.repsNames = repsNames;
-        this.repsTitles = repsTitles;
+        this.repsParties = repsParties;
+        this.repsBioguideIds = repsBioguideIds;
+        this.electionPercentages = electionPercentages;
+        this.countyState = countyState;
     }
 
     @Override
@@ -47,13 +53,13 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
             TextView repNameView = (TextView) view.findViewById(R.id.name);
             TextView repTitleView = (TextView) view.findViewById(R.id.title);
             repNameView.setText(repsNames[col]);
-            repTitleView.setText(repsTitles[col]);
+            repTitleView.setText(repsParties[col]);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d("CLICKED: ", repsNames[col]);
                     Intent phoneIntent = new Intent(mContext, WatchToPhoneService.class);
-                    String data = String.format("%s;%s;%s;%s;%s;%s", repsNames[col], "Democrat", "B@gmail.com", "www.B.com", "This is tweet B", repsTitles[col]);
+                    String data = repsBioguideIds[col];
                     phoneIntent.putExtra("DATA", data);
                     mContext.startService(phoneIntent);
                 }
@@ -66,12 +72,12 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
             TextView stateView = (TextView) view.findViewById(R.id.state);
 
             Random ran = new Random();
-            int obamaVotes = ran.nextInt(20) + 50;
-            String[] californiaCounties = new String[] { "Alameda", "Alpine", "Amador", "Butte","Calaveras", "Colusa", "Fresno", "Glenn"};
-            obamaView.setText("Obama: " + Integer.toString(obamaVotes) + "%");
-            romneyView.setText("Romney: " + Integer.toString(100-obamaVotes) + "%");
-            countyView.setText(californiaCounties[ran.nextInt(californiaCounties.length)] + " County");
-            stateView.setText("California");
+//            int obamaVotes = ran.nextInt(20) + 50;
+//            String[] californiaCounties = new String[] { "Alameda", "Alpine", "Amador", "Butte","Calaveras", "Colusa", "Fresno", "Glenn"};
+            obamaView.setText("Obama: " + electionPercentages[0] + "%");
+            romneyView.setText("Romney: " + electionPercentages[1] + "%");
+            countyView.setText(countyState[0]);
+            stateView.setText(countyState[1]);
         }
         container.addView(view);
         return view;

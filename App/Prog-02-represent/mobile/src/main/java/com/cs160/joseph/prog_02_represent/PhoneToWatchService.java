@@ -45,8 +45,6 @@ public class PhoneToWatchService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // Which cat do we want to feed? Grab this info from INTENT
-        // which was passed over when we called startService
         Bundle extras = intent.getExtras();
         final String data = extras.getString("DATA");
 
