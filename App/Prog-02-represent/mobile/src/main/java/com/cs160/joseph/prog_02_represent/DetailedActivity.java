@@ -52,7 +52,7 @@ public class DetailedActivity extends AppCompatActivity {
         final String bioguideId = intent.getStringExtra("BIOGUIDE_ID");
         Log.d("BIOGUIDE_ID: ", bioguideId);
 
-        String legislatorsRequestUrl = String.format("%s?bioguide_id=%s&&apikey=%s", mSunlightFoundationLegislatorsURL, bioguideId, MainActivity.getSunlightFoundationAPIKey());
+        String legislatorsRequestUrl = String.format("%s?bioguide_id=%s&&apikey=%s", mSunlightFoundationLegislatorsURL, bioguideId, CongressionalActivity.getSunlightFoundationAPIKey());
         JsonObjectRequest legislatorsRequest = new JsonObjectRequest
                 (Request.Method.GET, legislatorsRequestUrl, null, new Response.Listener<JSONObject>() {
 
@@ -70,7 +70,7 @@ public class DetailedActivity extends AppCompatActivity {
                 });
 
 
-        String committeesRequestUrl = String.format("%s?member_ids=%s&&apikey=%s", mSunlightFoundationCommitteesURL, bioguideId, MainActivity.getSunlightFoundationAPIKey());
+        String committeesRequestUrl = String.format("%s?member_ids=%s&&apikey=%s", mSunlightFoundationCommitteesURL, bioguideId, CongressionalActivity.getSunlightFoundationAPIKey());
         JsonObjectRequest committeesRequest = new JsonObjectRequest
                 (Request.Method.GET, committeesRequestUrl, null, new Response.Listener<JSONObject>() {
 
@@ -88,7 +88,7 @@ public class DetailedActivity extends AppCompatActivity {
                 });
 
 
-        String billsRequestUrl = String.format("%s?sponsor_id=%s&&apikey=%s", mSunlightFoundationBillsURL, bioguideId, MainActivity.getSunlightFoundationAPIKey());
+        String billsRequestUrl = String.format("%s?sponsor_id=%s&&apikey=%s", mSunlightFoundationBillsURL, bioguideId, CongressionalActivity.getSunlightFoundationAPIKey());
         JsonObjectRequest billsRequest = new JsonObjectRequest
                 (Request.Method.GET, billsRequestUrl, null, new Response.Listener<JSONObject>() {
 

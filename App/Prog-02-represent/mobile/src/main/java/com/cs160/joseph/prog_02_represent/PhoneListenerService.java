@@ -12,7 +12,10 @@ import android.widget.Toast;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 /**
  * Created by JOSEPH on 3/3/16.
@@ -25,24 +28,33 @@ public class PhoneListenerService extends WearableListenerService {
     public void onMessageReceived(MessageEvent messageEvent) {
         Log.d("T", "in PhoneListenerService, got: " + messageEvent.getPath());
         String data = new String(messageEvent.getData(), StandardCharsets.UTF_8);
-        if (data.length() == 5) {
-            Log.d("RECEIVED ZIPCODE: ", data);
-            Intent intent = new Intent(this, CongressionalActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Need to add this flag since you're starting a new activity from a service
-            intent.putExtra("REPS_NAMES", new String[]{"Person D", "Person E", "Person F"});
-            intent.putExtra("REPS_PARTIES", new String[]{"Democrat", "Democrat", "Republican"});
-            intent.putExtra("REPS_EMAILS", new String[]{"D@gmail.com", "E@gmail.com", "F@gmail.com"});
-            intent.putExtra("REPS_WEBSITES", new String[]{"www.D.com", "www.E.com", "www.F.com"});
-            intent.putExtra("REPS_TWEETS", new String[]{"This is tweet D", "This is tweet E", "This is tweet F"});
-            intent.putExtra("REPS_TITLES", new String[]{"Representative D", "Representative E", "Representative F"});
+        if (data == "ZIPCODE") {
+            Log.d("RECEIVED: ", "NEW ZIPCODE REQUEST");
+            Intent congressionalIntent = new Intent(this, CongressionalActivity.class);
+            congressionalIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Need to add this flag since you're starting a new activity from a service
+            String usaZipCodesString = "";
+            try {
+                InputStream stream = getAssets().open("usa_zip_codes.txt");
+                int size = stream.available();
+                byte[] buffer = new byte[size];
+                stream.read(buffer);
+                stream.close();
+                usaZipCodesString = new String(buffer, "UTF-8");
+            } catch (IOException e) {
 
-            Intent watchIntent = new Intent(this, PhoneToWatchService.class);
-            String watchData = TextUtils.join(",", new String[]{"Person D", "Person E", "Person F"});
-            watchData += ";" + TextUtils.join(",", new String[]{"Representative D", "Representative E", "Representative F"});
-            watchIntent.putExtra("DATA", watchData);
+            }
+            String[] usaZipCodesList = usaZipCodesString.split("\n");
+            Random ran = new Random();
+            String newZipCode = usaZipCodesList[ran.nextInt(usaZipCodesList.length)];
+            congressionalIntent.putExtra("ZIPCODE", newZipCode);
 
-            startActivity(intent);
-            startService(watchIntent);
+//            Intent watchIntent = new Intent(this, PhoneToWatchService.class);
+//            String watchData = TextUtils.join(",", new String[]{"Person D", "Person E", "Person F"});
+//            watchData += ";" + TextUtils.join(",", new String[]{"Representative D", "Representative E", "Representative F"});
+//            watchIntent.putExtra("DATA", watchData);
+
+            startActivity(congressionalIntent);
+//            startService(watchIntent);
         } else {
             Log.d("RECEIVED DATA:", data);
             String[] dataArray = data.split(";");

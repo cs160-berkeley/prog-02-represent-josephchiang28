@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
     private final SensorEventListener mSensorListener = new SensorEventListener() {
 
         public void onSensorChanged(SensorEvent se) {
+            Log.d("IN", "SENSOR CHANGED");
             float x = se.values[0];
             float y = se.values[1];
             float z = se.values[2];
@@ -68,12 +69,13 @@ public class MainActivity extends Activity {
             float delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta; // perform low-cut filter
 
+            Log.d("SENSOR CHANGED TO", Float.toString(mAccelCurrent));
             if (mAccelCurrent > 50) {
                 Context context = getApplicationContext();
                 Random ran = new Random();
                 int newZipcode = ran.nextInt(90000) + 10000;
                 Intent shakeIntent = new Intent(context, WatchToPhoneService.class);
-                shakeIntent.putExtra("DATA", Integer.toString(newZipcode));
+                shakeIntent.putExtra("DATA", "ZIPCODE");
                 startService(shakeIntent);
 
                 int duration = Toast.LENGTH_SHORT;
