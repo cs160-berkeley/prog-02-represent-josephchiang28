@@ -1,6 +1,7 @@
 package com.cs160.joseph.prog_02_represent;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class DetailedActivity extends AppCompatActivity {
@@ -38,11 +40,19 @@ public class DetailedActivity extends AppCompatActivity {
         put("M", "Male");
         put("F", "Female");
     }};
+    public static final HashMap<String, String> titleMap = new HashMap<String, String>() {{
+        put("Rep", "Representative");
+        put("Sen", "Senator");
+    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
+        ImageView twitterLogoView = (ImageView) findViewById(R.id.twitter_logo);
+        TextView repTweetView = (TextView) findViewById(R.id.rep_tweet);
+        twitterLogoView.setVisibility(View.GONE);
+        repTweetView.setVisibility(View.GONE);
         mRequestQueue = Volley.newRequestQueue(this);
         httpResponseCount = 0;
         httpResponseRequired = 3;
@@ -131,7 +141,6 @@ public class DetailedActivity extends AppCompatActivity {
         TextView repPartyView = (TextView) findViewById(R.id.rep_party);
         TextView repEmailView = (TextView) findViewById(R.id.rep_email);
         TextView repWebsiteView = (TextView) findViewById(R.id.rep_website);
-        TextView repTweetView = (TextView) findViewById(R.id.rep_tweet);
         TextView repDetailedInfoView = (TextView) findViewById(R.id.detailed_info);
 
         try {
@@ -144,26 +153,23 @@ public class DetailedActivity extends AppCompatActivity {
             Picasso.with(getApplicationContext()).load("https://twitter.com/" + repJsonObject.getString("twitter_id") + "/profile_image?size=original").into(imageView);
             repNameView.setText(repJsonObject.getString("first_name") + " " + repJsonObject.getString("last_name"));
             repPartyView.setText(MainActivity.partyMap.get(repJsonObject.getString("party")));
+            repPartyView.setTextColor(Color.parseColor(CongressionalListAdapter.partyColorMap.get(MainActivity.partyMap.get(repJsonObject.getString("party")))));
             repEmailView.setText(repJsonObject.getString("oc_email"));
             repWebsiteView.setText(repJsonObject.getString("website"));
-            repTweetView.setText(intent.getStringExtra("TWEET"));
 
             // Set detailed profile
             StringBuffer profileSb = new StringBuffer();
-            profileSb.append("Full Name: ");
-            profileSb.append(repJsonObject.getString("first_name") + " " + repJsonObject.getString("last_name"));
+            profileSb.append("Title: ");
+            profileSb.append(titleMap.get(repJsonObject.getString("title")));
+            profileSb.append("\n");
+            profileSb.append("Gender: ");
+            profileSb.append(genderMap.get(repJsonObject.getString("gender")));
             profileSb.append("\n");
             profileSb.append("Birthday: ");
             profileSb.append(repJsonObject.getString("birthday"));
             profileSb.append("\n");
             profileSb.append("Term end: ");
             profileSb.append(repJsonObject.getString("term_end"));
-            profileSb.append("\n");
-            profileSb.append("gender: ");
-            profileSb.append(genderMap.get(repJsonObject.getString("gender")));
-            profileSb.append("\n");
-            profileSb.append("Title: ");
-            profileSb.append(repJsonObject.getString("title"));
             repDetailedInfoView.setText(profileSb.toString());
 
         } catch (JSONException e) {
@@ -181,7 +187,7 @@ public class DetailedActivity extends AppCompatActivity {
             for (int i = 0; i < committeesJsonArray.length(); i++) {
                 committeesNameArray[i] = committeesJsonArray.getJSONObject(i).getString("name");
             }
-            repCommitteesView.setText("Committees: \n" + TextUtils.join("\n", committeesNameArray));
+            repCommitteesView.setText(TextUtils.join("\n\n", Arrays.copyOfRange(committeesNameArray, 0, 5)));
         } catch (JSONException e) {
             Log.d("JSONEXCEPTION: ", e.getMessage());
         }
@@ -201,7 +207,7 @@ public class DetailedActivity extends AppCompatActivity {
                     billsNameArray[i] = billsJsonArray.getJSONObject(i).getString("official_title");
                 }
             }
-            repBillsView.setText("Bills: \n" + TextUtils.join("\n", billsNameArray));
+            repBillsView.setText(TextUtils.join("\n\n", Arrays.copyOfRange(billsNameArray, 0, 5)));
         } catch (JSONException e) {
             Log.d("JSONEXCEPTION: ", e.getMessage());
         }

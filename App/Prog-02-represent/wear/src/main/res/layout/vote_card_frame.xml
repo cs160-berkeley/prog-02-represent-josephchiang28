@@ -3,41 +3,88 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#9999ff">
 
     <TextView
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:textAlignment="center"
-        android:text="2012\nPresidential Vote" />
+        android:text="2012\nPresidential Vote"
+        android:textSize="17sp"
+        android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/obama"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Obama: 57%" />
+        android:layout_gravity="left">
 
-    <TextView
-        android:id="@+id/romney"
-        android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/obama"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:gravity="right"
+            android:textSize="17sp"
+            android:textColor="#0000ff" />
+
+        <TextView
+            android:id="@+id/obama_bar"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textAlignment="center"
+            android:textSize="10sp"
+            android:background="#0000ff" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Romney: 43%" />
+        android:layout_gravity="left">
+
+        <TextView
+            android:id="@+id/romney"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:gravity="right"
+            android:textSize="17sp"
+            android:textColor="#cc0000" />
+
+        <TextView
+            android:id="@+id/romney_bar"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textAlignment="center"
+            android:textSize="10sp"
+            android:background="#cc0000" />
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/county"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:textAlignment="center"
-        android:text="Alameda County" />
+        android:textSize="17sp"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="California" />
+        android:textSize="17sp"
+        android:textColor="@color/black" />
 
 </LinearLayout>

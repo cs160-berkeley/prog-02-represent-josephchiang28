@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="5dp">
+    android:paddingLeft="5dp"
+    android:background="#9999ff">
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="30dp"
         android:id="@+id/portrait"
         android:background="@android:color/darker_gray"
         android:layout_gravity="center_horizontal"
@@ -20,13 +21,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Person A" />
+        android:textSize="15sp"
+        android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/party"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Senator" />
+        android:textSize="15sp"
+        android:textColor="@color/black" />
 
 </LinearLayout>

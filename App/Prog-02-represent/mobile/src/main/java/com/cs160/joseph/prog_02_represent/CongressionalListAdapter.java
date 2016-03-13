@@ -1,6 +1,7 @@
 package com.cs160.joseph.prog_02_represent;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 public class CongressionalListAdapter extends ArrayAdapter<String> {
 
@@ -19,6 +22,11 @@ public class CongressionalListAdapter extends ArrayAdapter<String> {
     private final String[] repsWebsites;
     private final String[] repsTweets;
     private final String[] repsTwitterIds;
+    public static final HashMap<String, String> partyColorMap = new HashMap<String, String>() {{
+        put("Democrat", "#0000ff");
+        put("Republican", "#cc0000");
+        put("Independent", "#00ff00");
+    }};
 
     public CongressionalListAdapter(Activity context, String[] repsNames, String[] repsParties, String[] repsEmails, String[] repsWebsites, String[] repsTweets, String[] repsTwitterIds) {
         super(context, R.layout.rep_list_row, repsNames);
@@ -47,6 +55,7 @@ public class CongressionalListAdapter extends ArrayAdapter<String> {
         Picasso.with(context).load("https://twitter.com/" + repsTwitterIds[position] + "/profile_image?size=original").into(imageView);
         repNameView.setText(repsNames[position]);
         repPartyView.setText(repsParties[position]);
+        repPartyView.setTextColor(Color.parseColor(partyColorMap.get(repsParties[position])));
         repEmailView.setText(repsEmails[position]);
         repWebsiteView.setText(repsWebsites[position]);
         repTweetView.setText(repsTweets[position]);

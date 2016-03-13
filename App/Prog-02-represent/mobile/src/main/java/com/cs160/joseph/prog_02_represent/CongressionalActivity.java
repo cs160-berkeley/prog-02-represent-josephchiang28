@@ -271,6 +271,7 @@ public class CongressionalActivity extends AppCompatActivity {
                             tweetMap.put(index, tweet);
                             setViewAndSendWatchIntentIfReady();
                         }
+
                         @Override
                         public void failure(TwitterException e) {
                             e.printStackTrace();
@@ -279,6 +280,7 @@ public class CongressionalActivity extends AppCompatActivity {
                 }
 
             }
+
             @Override
             public void failure(TwitterException e) {
                 e.printStackTrace();
@@ -313,13 +315,17 @@ public class CongressionalActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent detailedIntent = new Intent(CongressionalActivity.this, DetailedActivity.class);
-                detailedIntent.putExtra("TWEET", repsTweets[position]);
-                detailedIntent.putExtra("TWITTER_ID", repsTwitterIds[position]);
-                detailedIntent.putExtra("BIOGUIDE_ID", repsBioguideIds[position]);
-                startActivity(detailedIntent);
+                sendDetailedActivityIntent(position, repsTweets, repsTwitterIds, repsBioguideIds);
             }
         });
+    }
+
+    public void sendDetailedActivityIntent(int position, String[] repsTweets, String[] repsTwitterIds, String[] repsBioguideIds) {
+        Intent detailedIntent = new Intent(CongressionalActivity.this, DetailedActivity.class);
+        detailedIntent.putExtra("TWEET", repsTweets[position]);
+        detailedIntent.putExtra("TWITTER_ID", repsTwitterIds[position]);
+        detailedIntent.putExtra("BIOGUIDE_ID", repsBioguideIds[position]);
+        startActivity(detailedIntent);
     }
 
     public void sendWatchIntent() {

@@ -2,6 +2,7 @@ package com.cs160.joseph.prog_02_represent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.wearable.view.GridPagerAdapter;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -24,6 +26,11 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
     private final String[] repsBioguideIds;
     private final String[] electionPercentages;
     private final String[] countyState;
+    public static final HashMap<String, String> partyColorMap = new HashMap<String, String>() {{
+        put("Democrat", "#0000ff");
+        put("Republican", "#cc0000");
+        put("Independent", "#00ff00");
+    }};
 
 
     public RepGridPagerAdapter(final Context context, String[] repsNames, String[] repsParties, String[] repsBioguideIds, String[] electionPercentages, String[] countyState) {
@@ -51,9 +58,10 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
         if (col < repsNames.length) {
             view = LayoutInflater.from(mContext).inflate(R.layout.rep_card_frame, container, false);
             TextView repNameView = (TextView) view.findViewById(R.id.name);
-            TextView repTitleView = (TextView) view.findViewById(R.id.title);
+            TextView repPartyView = (TextView) view.findViewById(R.id.party);
             repNameView.setText(repsNames[col]);
-            repTitleView.setText(repsParties[col]);
+            repPartyView.setText(repsParties[col]);
+            repPartyView.setTextColor(Color.parseColor(partyColorMap.get(repsParties[col])));
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,15 +75,24 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
         } else {
             view = LayoutInflater.from(mContext).inflate(R.layout.vote_card_frame, container, false);
             TextView obamaView = (TextView) view.findViewById(R.id.obama);
+            TextView obamaBarView = (TextView) view.findViewById(R.id.obama_bar);
             TextView romneyView = (TextView) view.findViewById(R.id.romney);
+            TextView romneyBarView = (TextView) view.findViewById(R.id.romney_bar);
             TextView countyView = (TextView) view.findViewById(R.id.county);
             TextView stateView = (TextView) view.findViewById(R.id.state);
 
             Random ran = new Random();
-//            int obamaVotes = ran.nextInt(20) + 50;
-//            String[] californiaCounties = new String[] { "Alameda", "Alpine", "Amador", "Butte","Calaveras", "Colusa", "Fresno", "Glenn"};
             obamaView.setText("Obama: " + electionPercentages[0] + "%");
+//            obamaBarView.setWidth((int) Math.round(70 * Double.parseDouble(electionPercentages[0]) / 100));
+//            obamaBarView.setWidth(10);
+            ViewGroup.LayoutParams obamaBarParams = obamaBarView.getLayoutParams();
+            obamaBarParams.width = (int) Math.round(70 * Double.parseDouble(electionPercentages[0]) / 100);
+            obamaBarView.setLayoutParams(obamaBarParams);
             romneyView.setText("Romney: " + electionPercentages[1] + "%");
+            ViewGroup.LayoutParams romneyBarParams = romneyBarView.getLayoutParams();
+            romneyBarParams.width = (int) Math.round(70 * Double.parseDouble(electionPercentages[1]) / 100);
+            romneyBarView.setLayoutParams(romneyBarParams);
+//            romneyBarView.setWidth((int) Math.round(70 * Double.parseDouble(electionPercentages[1]) / 100));
             countyView.setText(countyState[0]);
             stateView.setText(countyState[1]);
         }
