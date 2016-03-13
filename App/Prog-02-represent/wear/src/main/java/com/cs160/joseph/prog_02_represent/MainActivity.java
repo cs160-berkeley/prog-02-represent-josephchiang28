@@ -25,7 +25,8 @@ public class MainActivity extends Activity {
     private float mAccel; // acceleration apart from gravity
     private float mAccelCurrent; // current acceleration including gravity
     private float mAccelLast; // last acceleration including gravity
-    private TextView mTextView;
+    private static float prevX = 0.00f;
+    private String zipcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,40 +49,43 @@ public class MainActivity extends Activity {
             String[] repsBioguideIds = categories[2].split(",");
             String[] electionPercentages = categories[3].split(",");
             String[] countyState = categories[4].split(",");
+            zipcode = categories[5];
             Log.d("DATA", data);
             Log.d("repsNames", categories[0]);
             final GridViewPager pager = (GridViewPager) findViewById(R.id.pager);
             RepGridPagerAdapter rpager = new RepGridPagerAdapter(this, repsNames, repsParties, repsBioguideIds, electionPercentages, countyState);
             pager.setAdapter(rpager);
         }
+        if (zipcode != null) {
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(getApplicationContext(), "Zipcode set to " + zipcode, duration);
+            toast.show();
+        }
     }
 
     private final SensorEventListener mSensorListener = new SensorEventListener() {
 
         public void onSensorChanged(SensorEvent se) {
-            Log.d("IN", "SENSOR CHANGED");
             float x = se.values[0];
             float y = se.values[1];
             float z = se.values[2];
-            float mAccelprev = mAccelLast;
             mAccelLast = mAccelCurrent;
             mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
             float delta = mAccelCurrent - mAccelLast;
-            mAccel = mAccel * 0.9f + delta; // perform low-cut filter
+//            mAccel = mAccel * 0.9f + delta; // perform low-cut filter
 
-            Log.d("SENSOR CHANGED TO", Float.toString(mAccelCurrent));
-            if (mAccelCurrent > 50) {
+//            Log.d("SENSOR CHANGED TO", Float.toString(mAccelCurrent));
+            if (x - prevX > 50) {
+                Log.d("SENSOR DELTA: ", Float.toString(delta));
                 Context context = getApplicationContext();
                 Random ran = new Random();
                 int newZipcode = ran.nextInt(90000) + 10000;
                 Intent shakeIntent = new Intent(context, WatchToPhoneService.class);
                 shakeIntent.putExtra("DATA", "ZIPCODE");
                 startService(shakeIntent);
-
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, "Zipcode changed to " + Integer.toString(newZipcode), duration);
-                toast.show();
             }
+
+            prevX = x;
         }
 
         public void onAccuracyChanged(Sensor sensor, int accuracy) {

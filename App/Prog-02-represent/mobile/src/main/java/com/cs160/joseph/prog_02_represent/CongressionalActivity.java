@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.AppSession;
@@ -46,6 +47,7 @@ public class CongressionalActivity extends AppCompatActivity {
     private HashMap<String, String> electionInfo;
     private int tweetRequired;
     private HashMap<Integer, String> tweetMap;
+    private String[] mUsaZipcodeArray;
     private static final String mSunlightFoundationLegislatorsLocateURL = "http://congress.api.sunlightfoundation.com/legislators/locate";
     private static final String mSunlightFoundationAPIKey = "f7d96524dc8f4b9aa7ef8885500db58f";
     private static final String mGoogleMapsGeocodingURL = "https://maps.googleapis.com/maps/api/geocode/json";
@@ -67,6 +69,18 @@ public class CongressionalActivity extends AppCompatActivity {
         tweetMap = new HashMap<Integer, String>();
         repsInfo = new HashMap<String, String[]>();
 
+        try {
+            InputStream stream = getAssets().open("usa_zip_codes.txt");
+            int size = stream.available();
+            byte[] buffer = new byte[size];
+            stream.read(buffer);
+            stream.close();
+            String usaZipCodesString = new String(buffer, "UTF-8");
+            mUsaZipcodeArray = usaZipCodesString.split("\n");
+        } catch (IOException e) {
+
+        }
+
         intent = getIntent();
         String zipcode = intent.getStringExtra("ZIPCODE");
         String latitude = intent.getStringExtra("LATITUDE");
@@ -79,7 +93,12 @@ public class CongressionalActivity extends AppCompatActivity {
         return mSunlightFoundationAPIKey;
     }
 
-    public void requestRepInfo(String zip, String latitude, String longitude) {
+    public String generateRandomZipcode() {
+        Random ran = new Random();
+        return mUsaZipcodeArray[ran.nextInt(mUsaZipcodeArray.length)];
+    }
+
+    public void requestRepInfo(final String zip, String latitude, String longitude) {
         String url;
         if (zip == null) {
             url = String.format("%s?latitude=%s&longitude=%s&apikey=%s", mSunlightFoundationLegislatorsLocateURL, latitude, longitude, mSunlightFoundationAPIKey);
@@ -93,6 +112,15 @@ public class CongressionalActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getInt("count") == 0) {
+                                Log.d("ERROR: ", "DID NOT GET REP RESULT FOR ZIPCODE " + zip);
+                                requestRepInfo(generateRandomZipcode(), null, null);
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            return;
+                        }
                         repsInfo = parseRepResponse(response);
                         Log.d("REP RESPONSE", response.toString());
                         requestTweets();
@@ -170,9 +198,7 @@ public class CongressionalActivity extends AppCompatActivity {
             JSONArray addressComponents = response.getJSONArray("results").getJSONObject(0).getJSONArray("address_components");
             for (int i = 0; i < addressComponents.length(); i++) {
                 JSONArray types = addressComponents.getJSONObject(i).getJSONArray("types");
-                Log.d("ADDRESS COMPONENT: ", addressComponents.getJSONObject(i).toString());
                 for (int j = 0; j < types.length(); j++) {
-                    Log.d("TYPE: ", types.getString(j));
                     if (types.getString(j).equals("administrative_area_level_2")) {
                         county = addressComponents.getJSONObject(i).getString("short_name").replace("County", "").trim();
                     }
@@ -303,6 +329,7 @@ public class CongressionalActivity extends AppCompatActivity {
         data += ";" + TextUtils.join(",", repsInfo.get("REPS_BIOGUIDE_IDS"));
         data += ";" + electionInfo.get("obama-percentage") + "," + electionInfo.get("romney-percentage");
         data += ";" + electionInfo.get("county-name") + "," + electionInfo.get("state-postal");
+        data += ";" + intent.getStringExtra("ZIPCODE");
         watchIntent.putExtra("DATA", data);
         startService(watchIntent);
     }

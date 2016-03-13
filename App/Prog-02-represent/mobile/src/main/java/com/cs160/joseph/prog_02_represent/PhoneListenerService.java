@@ -28,7 +28,8 @@ public class PhoneListenerService extends WearableListenerService {
     public void onMessageReceived(MessageEvent messageEvent) {
         Log.d("T", "in PhoneListenerService, got: " + messageEvent.getPath());
         String data = new String(messageEvent.getData(), StandardCharsets.UTF_8);
-        if (data == "ZIPCODE") {
+        Log.d("RECEIVED DATA:", data);
+        if (data.equals("ZIPCODE")) {
             Log.d("RECEIVED: ", "NEW ZIPCODE REQUEST");
             Intent congressionalIntent = new Intent(this, CongressionalActivity.class);
             congressionalIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Need to add this flag since you're starting a new activity from a service
@@ -46,18 +47,10 @@ public class PhoneListenerService extends WearableListenerService {
             String[] usaZipCodesList = usaZipCodesString.split("\n");
             Random ran = new Random();
             String newZipCode = usaZipCodesList[ran.nextInt(usaZipCodesList.length)];
+            Log.d("NEW ZIP CODE: ", newZipCode);
             congressionalIntent.putExtra("ZIPCODE", newZipCode);
-
-//            Intent watchIntent = new Intent(this, PhoneToWatchService.class);
-//            String watchData = TextUtils.join(",", new String[]{"Person D", "Person E", "Person F"});
-//            watchData += ";" + TextUtils.join(",", new String[]{"Representative D", "Representative E", "Representative F"});
-//            watchIntent.putExtra("DATA", watchData);
-
             startActivity(congressionalIntent);
-//            startService(watchIntent);
         } else {
-            Log.d("RECEIVED DATA:", data);
-            String[] dataArray = data.split(";");
             Intent intent = new Intent(this, DetailedActivity.class );
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Need to add this flag since you're starting a new activity from a service
             intent.putExtra("BIOGUIDE_ID", data);
