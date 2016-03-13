@@ -1,20 +1,27 @@
 # PROG 02: Represent!
 
-Briefly describe your app here.
+An app that allows users to look up representative or senator information by area.
 
 ## Authors
 
-FirstName LastName ([your_email@berkeley.edu](mailto:your_email@berkeley.edu))
+Chien Ting (Joseph) Chiang ([josephchiang28@berkeley.edu](mailto:your_email@berkeley.edu))
 
 ## Demo Video
 
-See [your demo video title here] (https://link_to_your_video)
+https://youtu.be/nqbh6ErBHqk
 
 ## Screenshots
 
-<img src="screenshots/main.png" height="400" alt="Screenshot"/>
+<img src="screenshots/mobile_main_view.png" height="400" alt="Screenshot"/>
+<img src="screenshots/mobile_congressional_view.png" height="400" alt="Screenshot"/>
+<img src="screenshots/mobile_detailed_view.png" height="400" alt="Screenshot"/>
+<img src="screenshots/wear_main_view.png" height="200" alt="Screenshot"/>
+<img src="screenshots/wear_vote_view.png" height="200" alt="Screenshot"/>
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Any other support
+List of APIs used
+* Google Location
+* Google Geocoding
+* Twitter
+* Sunlight Foundation API
