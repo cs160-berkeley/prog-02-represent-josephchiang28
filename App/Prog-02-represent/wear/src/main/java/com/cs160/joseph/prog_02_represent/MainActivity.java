@@ -56,7 +56,8 @@ public class MainActivity extends Activity {
             RepGridPagerAdapter rpager = new RepGridPagerAdapter(this, repsNames, repsParties, repsBioguideIds, electionPercentages, countyState);
             pager.setAdapter(rpager);
         }
-        if (zipcode != null) {
+
+        if (zipcode != null && !zipcode.equals("null")) {
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(getApplicationContext(), "Zipcode set to " + zipcode, duration);
             toast.show();
@@ -74,7 +75,6 @@ public class MainActivity extends Activity {
             float delta = mAccelCurrent - mAccelLast;
 //            mAccel = mAccel * 0.9f + delta; // perform low-cut filter
 
-//            Log.d("SENSOR CHANGED TO", Float.toString(mAccelCurrent));
             if (x - prevX > 50) {
                 Log.d("SENSOR DELTA: ", Float.toString(delta));
                 Context context = getApplicationContext();
